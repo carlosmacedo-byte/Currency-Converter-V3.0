@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Children } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // 1. IMPORTAÇÕES UNIFICADAS (Sem referências a pastas Clear ou Dark)
 import Fundo from '../../components/Fundo/index.jsx';
 import ButtConvert from '../../components/Converter/index.jsx';
 import ButtFeedBack from '../../components/FeedBack/index.jsx';
+import SetaSifrao from '../../components/Indicador/index.jsx';
 
 import {
   Text,
@@ -17,15 +18,13 @@ import {
   Headers,
   NameCurrency,
   ValueCurrency,
-  Img,
   ButtonDark,
-  ButtonClear
+  ButtonClear,
 } from './styles.js';
 
 // Assets
 import ImgDolar from '../../assets/moedadolar.png';
 import ImgReal from '../../assets/moedareal.png';
-import ImgIndicador from '../../assets/setasifrao.png';
 import ImgEuro from '../../assets/moedaeuro.png';
 import ImgLibra from '../../assets/moedalibra.png';
 import ImgYuan from '../../assets/moedayuan.png';
@@ -277,7 +276,7 @@ function Home({ setDarkTheme, setClearTheme }) {
                   {erroConversao ? resultado : formatCurrency(amountOne, currencyFrom)}
                 </ValueCurrency>
               </div>
-              <Img src={ImgIndicador} alt="Indicador" />
+              <SetaSifrao />
               <div>
                 <img src={imgTo} alt="Câmbio Estrangeiro" />
                 <NameCurrency>{nameTo}</NameCurrency>
@@ -330,7 +329,7 @@ function Home({ setDarkTheme, setClearTheme }) {
                   {erroConversaoCrypto ? resultadoCrypto : formatCurrency(amountTwo, cryptoFrom)}
                 </ValueCurrency>
               </div>
-              <Img src={ImgIndicador} alt="Indicador" />
+              <SetaSifrao />
               <div>
                 <img src={imgCryptoTo} alt="Câmbio Estrangeiro" />
                 <NameCurrency>{nameCryptoTo}</NameCurrency>

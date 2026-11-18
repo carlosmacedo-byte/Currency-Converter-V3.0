@@ -43,7 +43,7 @@ export const darkTheme = {
   caixaBackground: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent)',
   
   // Textos
-  textMain: '#000000',
+  textMain: '#ffffff',
   textSecondary: '#AAAAAA',
   textInverted: '#FFFFFF',
   

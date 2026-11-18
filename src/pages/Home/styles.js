@@ -1,5 +1,8 @@
 import styled from "styled-components";
 
+import SifraoOne from "../../assets/setasifrao.png";
+import SifraoTwo from "../../assets/sifraotwo.png";
+
 // Estilização da página Home
 
 export const Headers = styled.div`
@@ -121,10 +124,6 @@ export const CardMoney = styled.div`
         flex-direction: column;
         align-items: center;
     }
-`;
-
-export const Img = styled.img`
-    width: 60px;
 `;
 
 export const NameCurrency = styled.p`
