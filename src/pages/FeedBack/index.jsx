@@ -1,9 +1,10 @@
-import FundoClear from '../../../Components/Fundo/clear/index.jsx'
-import ButtConvertClear from '../../../Components/Converter/clear/index.jsx'
-import ButtFBclear from '../../../Components/FeedBack/clear/index.jsx'
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+// Importações dos componentes unificados (ajuste o caminho se necessário)
+import Fundo from '../../components/Fundo/index.jsx';
+import ButtConvert from '../../components/Converter/index.jsx';
+import ButtFeedBack from '../../components/FeedBack/index.jsx';
 
 import {
   Headers,
@@ -18,10 +19,9 @@ import {
   ButtonCaixa,
   Text,
   Alert
-} from './styles.js'
+} from './styles.js';
 
-function FeedBack() {
-
+function FeedBack({ setDarkTheme, setClearTheme }) {
   const navigate = useNavigate();
   const [feedback, setFeedback] = useState('');
 
@@ -29,7 +29,6 @@ function FeedBack() {
   const [isError, setIsError] = useState(false); // Estado para controlar a cor (vermelho ou verde)
 
   const EnvioText = async () => {
-
     if (!feedback.trim()) {
       setIsError(true);
       setMensagemAlerta("Por favor, digite um feedback antes de enviar.");
@@ -55,7 +54,6 @@ function FeedBack() {
         setIsError(true);
         setMensagemAlerta("Houve uma falha na comunicação com o sistema de feedback.");
       }
-
     } catch (erro) {
       console.error("Erro no envio para o n8n:", erro);
       setIsError(true);
@@ -63,51 +61,40 @@ function FeedBack() {
     }
   };
 
-
   return (
-
-    <FundoClear>
-
+    <Fundo>
       <Headers>
-
-
         <ConteinerHeaders>
-
           <ButtonsMenu>
-
-            <ButtConvertClear type='button' onClick={() => navigate('/')}>Converter</ButtConvertClear>
-            <ButtFBclear type='button' onClick={() => navigate('/feedback-clear')}>Feedback</ButtFBclear>
-
+            {/* Navegação limpa, sem rotas de temas duplicadas */}
+            <ButtConvert type='button' onClick={() => navigate('/')}>Converter</ButtConvert>
+            <ButtFeedBack type='button' onClick={() => navigate('/feedback')}>Feedback</ButtFeedBack>
           </ButtonsMenu>
           <Temas>
-
-            <ButtonDark type='button' onClick={() => navigate('/feedback')}>☾</ButtonDark>
-            <ButtonClear type='button' onClick={() => navigate('/feedback-clear')}>☀</ButtonClear>
-
+            {/* Acionamento direto do estado global via Context API */}
+            <ButtonDark type='button' onClick={setDarkTheme}>☾</ButtonDark>
+            <ButtonClear type='button' onClick={setClearTheme}>☀</ButtonClear>
           </Temas>
-
         </ConteinerHeaders>
 
         <Body>
-
           <Caixa>
-            <Text>Nos conte o que acha desse projeto e se podemos melhorar de alguma forma. <br />
-              Seu Feedback é muito importante para nós!</Text>
+            <Text>
+              Nos conte o que acha desse projeto e se podemos melhorar de alguma forma. <br />
+              Seu Feedback é muito importante para nós!
+            </Text>
             <Alert $error={isError}>{mensagemAlerta}</Alert>
-            <Information placeholder="Digite seu feedback aqui..." value={feedback} onChange={(e) => setFeedback(e.target.value)} />
+            <Information 
+              placeholder="Digite seu feedback aqui..." 
+              value={feedback} 
+              onChange={(e) => setFeedback(e.target.value)} 
+            />
             <ButtonCaixa type='button' onClick={EnvioText}>Enviar</ButtonCaixa>
           </Caixa>
-
         </Body>
-
       </Headers>
-
-    </FundoClear>
-
-
-
-
-  )
+    </Fundo>
+  );
 }
 
-export default FeedBack
+export default FeedBack;

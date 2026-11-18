@@ -1,3 +1,11 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// 1. IMPORTAÇÕES UNIFICADAS (Sem referências a pastas Clear ou Dark)
+import Fundo from '../../components/Fundo/index.jsx';
+import ButtConvert from '../../components/Converter/index.jsx';
+import ButtFeedBack from '../../components/FeedBack/index.jsx';
+
 import {
   Text,
   CardCripto,
@@ -12,33 +20,27 @@ import {
   Img,
   ButtonDark,
   ButtonClear
-} from './styles.js'
+} from './styles.js';
 
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+// Assets
+import ImgDolar from '../../assets/moedadolar.png';
+import ImgReal from '../../assets/moedareal.png';
+import ImgIndicador from '../../assets/setasifrao.png';
+import ImgEuro from '../../assets/moedaeuro.png';
+import ImgLibra from '../../assets/moedalibra.png';
+import ImgYuan from '../../assets/moedayuan.png';
+import ImgIene from '../../assets/moedaiene.png';
+import ImgPeso from '../../assets/moedapeso.png';
+import ImgRublo from '../../assets/moedarublo.png';
+import ImgBitcoin from '../../assets/moedabitcoin.png';
+import ImgEther from '../../assets/moedaether.png';
+import ImgDogecoin from '../../assets/moedadogecoin.png';
+import ImgLitecoin from '../../assets/moedalitecoin.png';
+import ImgXrp from '../../assets/moedaxrp.png';
+import ImgSolana from '../../assets/moedasolana.png';
+import ImgBinanceCoin from '../../assets/moedabinance.png';
 
-// Importações específicas do tema CLEAR
-import FundoClear from '../../../Components/Fundo/clear/index.jsx'
-import ButtConvertClear from '../../../Components/Converter/clear/index.jsx'
-import ButtFBclear from '../../../Components/FeedBack/clear/index.jsx'
-
-import ImgDolar from '../../../assets/moedadolar.png'
-import ImgReal from '../../../assets/moedareal.png'
-import ImgIndicador from '../../../assets/setasifrao.png'
-import ImgEuro from '../../../assets/moedaeuro.png'
-import ImgLibra from '../../../assets/moedalibra.png'
-import ImgYuan from '../../../assets/moedayuan.png'
-import ImgIene from '../../../assets/moedaiene.png'
-import ImgPeso from '../../../assets/moedapeso.png'
-import ImgRublo from '../../../assets/moedarublo.png'
-import ImgBitcoin from '../../../assets/moedabitcoin.png'
-import ImgEther from '../../../assets/moedaether.png'
-import ImgDogecoin from '../../../assets/moedadogecoin.png'
-import ImgLitecoin from '../../../assets/moedalitecoin.png'
-import ImgXrp from '../../../assets/moedaxrp.png'
-import ImgSolana from '../../../assets/moedasolana.png'
-import ImgBinanceCoin from '../../../assets/moedabinance.png'
-
+// Dicionários e Utilitários (Regras de Negócio Inalteradas)
 const currencyMap = {
   real: { locale: "pt-BR", currency: "BRL" },
   dolar: { locale: "en-US", currency: "USD" },
@@ -67,7 +69,6 @@ const formatCurrency = (value, currencyKey) => {
   }).format(numericValue);
 };
 
-// Ferramenta utilitária de Clean Code: Validação e cálculo isolados (DRY)
 const calculateConversion = (amount, rateFrom, rateTo) => {
   const amountFloat = parseFloat(amount);
   if (isNaN(amountFloat) || amountFloat <= 0) return { error: "Número inválido" };
@@ -93,34 +94,32 @@ const visualsMap = {
   binancecoin: { src: ImgBinanceCoin, name: "Binance" },
 };
 
-function Home() {
+// 2. INJEÇÃO DE DEPENDÊNCIA (Recebendo os disparadores de estado global)
+function Home({ setDarkTheme, setClearTheme }) {
   const navigate = useNavigate();
 
-  // Estados Fiat
+  // Estados
   const [currencyFrom, setCurrencyFrom] = useState('real');
   const [currencyTo, setCurrencyTo] = useState('dolar');
   const [amountOne, setAmountOne] = useState('');
   const [erroConversao, setErroConversao] = useState(false);
   const [resultado, setResultado] = useState(0);
 
-  // Estados Crypto
   const [cryptoFrom, setCryptoFrom] = useState('bitcoin');
   const [cryptoTo, setCryptoTo] = useState('ether');
   const [amountTwo, setAmountTwo] = useState('');
   const [erroConversaoCrypto, setErroConversaoCrypto] = useState(false);
   const [resultadoCrypto, setResultadoCrypto] = useState(0);
 
-  // Estado Único Global para as Taxas
   const [rates, setRates] = useState(null);
 
   useEffect(() => {
-    // Requisição unificada e limpa para todas as cotações
     const fetchAllRates = async () => {
       try {
         const response = await fetch("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL,CNY-BRL,JPY-BRL,ARS-BRL,RUB-BRL,BTC-BRL,ETH-BRL,DOGE-BRL,LTC-BRL,USDT-BRL,XRP-BRL,SOL-BRL,BNB-BRL");
         const data = await response.json();
         setRates(data);
-        console.log("Sucesso: Cotações unificadas carregadas no sistema (Modo Clear)!", data);
+        console.log("Sucesso: Cotações unificadas carregadas no sistema!", data);
       } catch (error) {
         console.error("Erro na comunicação com a API:", error);
       }
@@ -168,9 +167,7 @@ function Home() {
 
     setErroConversao(false);
     setResultado(conversao.result);
-
   };
-
 
   const ButtonCrypto = () => {
     if (!rates) return;
@@ -198,20 +195,21 @@ function Home() {
 
     setErroConversaoCrypto(false);
     setResultadoCrypto(conversao.result);
-
   };
 
   return (
-    <FundoClear>
+    <Fundo>
       <Headers>
         <ConteinerHeaders>
           <ButtonsMenu>
-            <ButtConvertClear type='button' onClick={() => navigate('/')}>Converter</ButtConvertClear>
-            <ButtFBclear type='button' onClick={() => navigate('/feedback-clear')}>Feedback</ButtFBclear>
+            {/* 3. NAVEGAÇÃO LIMPA: Apenas as rotas oficiais */}
+            <ButtConvert type='button' onClick={() => navigate('/')}>Converter</ButtConvert>
+            <ButtFeedBack type='button' onClick={() => navigate('/feedback')}>Feedback</ButtFeedBack>
           </ButtonsMenu>
           <Temas>
-            <ButtonDark type='button' onClick={() => navigate('/dark')}>☾</ButtonDark>
-            <ButtonClear type='button' onClick={() => navigate('/')}>☀</ButtonClear>
+            {/* 4. DISPARADORES DE ESTADO: Mutações diretas no Contexto, sem rotas falsas */}
+            <ButtonDark type='button' onClick={setDarkTheme}>☾</ButtonDark>
+            <ButtonClear type='button' onClick={setClearTheme}>☀</ButtonClear>
           </Temas>
         </ConteinerHeaders>
 
@@ -221,23 +219,17 @@ function Home() {
             <p>Olá, você que está aqui, seja bem vindo ao <b>Currency Converter</b>,
                 um conversor cambial que traz os preços atuais de cada respectiva moeda
                 selecionada nos campos da sua direita.
-              <br/>
-              <br/>
-              O objetivo deste projeto é facilitar a leitura estratégica de valores cambiais através de alguns cliques e observação.<br/>
-              <br/>
+              <br/><br/>
+              O objetivo deste projeto é facilitar a leitura estratégica de valores cambiais através de alguns cliques e observação.<br/><br/>
               Este é um projeto ambicioso e de constante evolução, por isso estamos nos esforçando para que ele cresça,
-               trabalhando para que mais moedas sejam selecionadas e a diversidade desse projeto fique ainda maior.<br/>
-              <br/>
+               trabalhando para que mais moedas sejam selecionadas e a diversidade desse projeto fique ainda maior.<br/><br/>
               Até então contamos com as moedas e as criptomoedas mundiais mais importantes, porém sabemos que existem cerca 180 moedas 
-              oficiais reconhecidas pela <b>Organização das Nações Unidas (ONU)</b> em circulação no mundo e vamos trabalhar para que as melhores se enquadrem aqui.<br/>
-              <br/>
+              oficiais reconhecidas pela <b>Organização das Nações Unidas (ONU)</b> em circulação no mundo e vamos trabalhar para que as melhores se enquadrem aqui.<br/><br/>
               Peço que acessem a aba de FeedBack e deem um parecer sobre sua experiência nesse site e como pensam que esse projeto ainda pode 
               evoluir. Sua opinião e ideia é muito importante para nossa evolução!
                Obrigado por acessar essa ferramenta que provavelmente lhe será muito útil.
-              <br/>
-              <br/>
+              <br/><br/>
               <b>Sucesso!</b>
-
             </p>
           </Text>
 
@@ -350,8 +342,8 @@ function Home() {
           </CardCripto>
         </Body>
       </Headers>
-    </FundoClear>
-  )
+    </Fundo>
+  );
 }
 
-export default Home
+export default Home;

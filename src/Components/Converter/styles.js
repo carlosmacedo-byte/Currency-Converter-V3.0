@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
+// Estilização do botão de conversão
 export const ButtonConvert = styled.button`
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 1), transparent);
-    color: white;
+    background: ${({ theme }) => theme.buttonBg};
+    color: ${({ theme }) => theme.buttonText};
     padding: 8px 16px;
     width: 150px;
     height: 40px;
@@ -14,10 +15,10 @@ export const ButtonConvert = styled.button`
     position: relative;
     left: 50px;
 
-        &:hover {
+    &:hover {
         transform: translateY(-3px);
-        box-shadow: 1px 1px 10px 5px rgba(104, 104, 104, 0.6);
+        box-shadow: 1px 1px 10px 5px ${({ theme }) => theme.buttonShadow};
         border: solid 2px;
-        border-color: #000000;
+        border-color: ${({ theme }) => theme.buttonHoverBorder};
     }
 `

@@ -1,6 +1,6 @@
 import { ButtonFeedback } from "./styles.js";
 
-function ButtFBclear({children, ...props}) {
+function ButtFeedBack({children, ...props}) {
 
 
     return (
@@ -10,4 +10,4 @@ function ButtFBclear({children, ...props}) {
     )
 }
 
-export default ButtFBclear
+export default ButtFeedBack;

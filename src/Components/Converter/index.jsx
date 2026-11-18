@@ -1,6 +1,6 @@
 import { ButtonConvert } from "./styles";
 
-function ButtConvertDark({children, ...props}) {
+function ButtConvert({children, ...props}) {
 
 
     return (
@@ -10,4 +10,4 @@ function ButtConvertDark({children, ...props}) {
     )
 }
 
-export default ButtConvertDark
+export default ButtConvert;

@@ -1,24 +1,33 @@
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import { lightTheme, darkTheme } from './styles/theme.js';
 
+import Home from './pages/Home/index.jsx';
+import FeedBack from './pages/FeedBack/index.jsx';
 
-import Home from './pages/Home/Clear/index.jsx';
-import Dark from './pages/Home/Dark/index.jsx';
+export default function AppRoutes() {
 
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-import Feedback from './pages/FeedBack/Dark/index.jsx';
-import FeedbackClear from './pages/FeedBack/Clear/index.jsx';
+  // ARQUITETURA LIMPA: Funções com intenção absoluta (Evita o bug do duplo clique)
+  const setDarkTheme = () => setIsDarkMode(true);
+  const setClearTheme = () => setIsDarkMode(false);
 
-function AppRoutes() {
   return (
-    <BrowserRouter basename="/Currency-Converter-V3.0">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/dark" element={<Dark />} />
-        <Route path="/feedback" element={<Feedback />} />
-        <Route path="/feedback-clear" element={<FeedbackClear />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <BrowserRouter basename="/Currency-Converter-V3.0">
+        <Routes>
+          <Route 
+            path="/" 
+            element={<Home setDarkTheme={setDarkTheme} setClearTheme={setClearTheme} />} 
+          />
+          <Route 
+            path="/feedback" 
+            element={<FeedBack setDarkTheme={setDarkTheme} setClearTheme={setClearTheme} />} 
+          />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
-
-export default AppRoutes;
